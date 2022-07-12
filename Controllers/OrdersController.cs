@@ -46,9 +46,12 @@ namespace NewOrdersApi.Controllers
         [HttpPost]
         public async Task<IActionResult> placeOrder([Bind("Id,UserId,AddressLine1,AddressLine2,City,PostalCode,Country,Mobile,MailId,ContactPerson")] UserAddress address)
         {
-            int userId = 1000;
+            int userId = address.UserId;
             try
             {
+                _context.Add(address);
+                await _context.SaveChangesAsync();
+
                 var cart = await _context.Carts.Where(o => o.UserId == userId).ToListAsync();
                 float total = (float)(from c in cart where c.UserId == userId select c).Sum(x => x.SubTotal).Value;
                 if (cart != null)
@@ -82,10 +85,8 @@ namespace NewOrdersApi.Controllers
                         await _context.SaveChangesAsync();
 
                     }
-                    address.UserId = 1000;
-                    _context.Add(address);
-                    await _context.SaveChangesAsync();
-
+                    //address.UserId = 1000;
+                   
                     var add = _context.UserAddresses.Where(o => o.UserId == userId).ToList();
                     var oneAdd = add.LastOrDefault();
                     orderInfo.DeliveryAddress = oneAdd.Id;
@@ -121,7 +122,7 @@ namespace NewOrdersApi.Controllers
         {
             var orderI = _context.UserAddresses.Where(o => o.Id == uid).ToList();
             var addInfo = orderI.LastOrDefault();
-
+            
             return Ok(addInfo);
         }
 
@@ -141,7 +142,7 @@ namespace NewOrdersApi.Controllers
         {
             var orderI = _context.Orders.Where(o => o.UserId == id).ToList();
             var orderInfo = orderI.LastOrDefault();
-
+           
             return Ok(orderInfo);
         }
 
