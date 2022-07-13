@@ -28,7 +28,20 @@ namespace NewOrdersApi.Controllers
             return await _context.Orders.ToListAsync();
             
         }
+        
+        
+         [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrder(long id)
+        {
+            var order = _context.Orders.Where(e => e.UserId == id).ToList();
 
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return order;
+        }
        
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(long id)
