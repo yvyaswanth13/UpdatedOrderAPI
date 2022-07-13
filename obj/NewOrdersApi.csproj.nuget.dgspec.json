@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\source\\repos\\NewOrderAPI-master\\NewOrdersApi.csproj": {}
+    "C:\\Users\\Admin\\Documents\\GitHub\\UpdatedOrderAPI\\NewOrdersApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\source\\repos\\NewOrderAPI-master\\NewOrdersApi.csproj": {
+    "C:\\Users\\Admin\\Documents\\GitHub\\UpdatedOrderAPI\\NewOrdersApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\source\\repos\\NewOrderAPI-master\\NewOrdersApi.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\Documents\\GitHub\\UpdatedOrderAPI\\NewOrdersApi.csproj",
         "projectName": "NewOrdersApi",
-        "projectPath": "C:\\Users\\Admin\\source\\repos\\NewOrderAPI-master\\NewOrdersApi.csproj",
+        "projectPath": "C:\\Users\\Admin\\Documents\\GitHub\\UpdatedOrderAPI\\NewOrdersApi.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\source\\repos\\NewOrderAPI-master\\obj\\",
+        "outputPath": "C:\\Users\\Admin\\Documents\\GitHub\\UpdatedOrderAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -54,6 +54,10 @@
               "target": "Package",
               "version": "[5.0.17, )"
             },
+            "Microsoft.Extensions.Logging.Log4Net.AspNetCore": {
+              "target": "Package",
+              "version": "[6.1.0, )"
+            },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[5.0.2, )"
@@ -61,6 +65,10 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[5.6.3, )"
+            },
+            "log4net": {
+              "target": "Package",
+              "version": "[2.0.14, )"
             }
           },
           "imports": [

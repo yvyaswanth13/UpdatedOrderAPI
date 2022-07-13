@@ -13,13 +13,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+[assembly:log4net.Config.XmlConfigurator(Watch =true)]
 namespace NewOrdersApi
 {
     public class Startup
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger("Startup.cs");
         public Startup(IConfiguration configuration)
         {
+            log.Info("Running....You StartUp");
             Configuration = configuration;
         }
 
@@ -28,6 +30,7 @@ namespace NewOrdersApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddScoped(typeof(ECommerceContext));
 
             services.AddDbContext<ECommerceContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -42,8 +45,9 @@ namespace NewOrdersApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddLog4Net();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

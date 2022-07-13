@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NewOrdersApi.DataModel;
+using NewOrdersApi.Exceptions;
 
 namespace NewOrdersApi.Controllers
 {
@@ -25,8 +26,10 @@ namespace NewOrdersApi.Controllers
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
             return await _context.Orders.ToListAsync();
+            
         }
 
+       
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(long id)
         {
@@ -56,6 +59,7 @@ namespace NewOrdersApi.Controllers
                 float total = (float)(from c in cart where c.UserId == userId select c).Sum(x => x.SubTotal).Value;
                 if (cart != null)
                 {
+                    
                     Order order = new Order();
                    order.UserId = address.UserId;
                     order.TotalAmount = Math.Round(total, 2);
@@ -68,7 +72,12 @@ namespace NewOrdersApi.Controllers
                     await _context.SaveChangesAsync();
 
                     var orderI = _context.Orders.Where(o => o.UserId == userId).ToList();
+                    
                     var orderInfo = orderI.LastOrDefault();
+                    if (orderInfo.OrderId == null || orderInfo.OrderId<=0)
+                    {
+                        throw new OrderIdNotFound("Order Id Not Generated");
+                    }
                     foreach (var c in cart)
                     {
 
@@ -106,13 +115,13 @@ namespace NewOrdersApi.Controllers
                 }
                 else
                 {
-                    return Ok("Fail");
+                    return BadRequest();
                 }
 
             }
             catch (Exception e)
             {
-                return Ok();
+                return BadRequest();
             }
         }
         
@@ -120,41 +129,74 @@ namespace NewOrdersApi.Controllers
         [HttpGet]
         public async Task<ActionResult> GetUserAdd(int uid)
         {
-            var orderI = _context.UserAddresses.Where(o => o.Id == uid).ToList();
-            var addInfo = orderI.LastOrDefault();
-            
-            return Ok(addInfo);
+            try
+            {
+                var userAdd = _context.UserAddresses.Where(o => o.Id == uid).ToList();
+                var addInfo = userAdd.LastOrDefault();
+                if(addInfo==null)
+                {
+                    throw new UserAddressNotFound("AddressNot Found for This User:"+uid);
+
+                }
+
+                return Ok(addInfo);
+            }
+            catch(Exception e)
+            {
+                return BadRequest();
+            }
         }
 
         [Route("GetOrderItems")]
         [HttpGet]
         public async Task<ActionResult> GetOrderItems(int oid)
         {
+            try { 
             var orderI = _context.OrderItems.Where(o => o.OrderId == oid).ToList();
 
             return Ok(orderI);
         }
+            catch(Exception e)
+            {
+                return BadRequest();
+    }
+}
 
 
         [Route("GetById")]
         [HttpGet]
         public async Task<ActionResult> GetById(int id)
         {
-            var orderI = _context.Orders.Where(o => o.UserId == id).ToList();
-            var orderInfo = orderI.LastOrDefault();
-           
-            return Ok(orderInfo);
+            try
+            {
+                var orderI = _context.Orders.Where(o => o.UserId == id).ToList();
+                var orderInfo = orderI.LastOrDefault();
+
+                return Ok(orderInfo);
+            }
+            catch(Exception e)
+            {
+                return BadRequest();
+            }
         }
 
         [Route("GetOrders")]
         [HttpGet]
         public async Task<ActionResult> GetOrder()
         {
-            var orders = _context.Orders.ToList();
-            return Ok(orders);
+            try
+            {
+                var orders = _context.Orders.ToList();
+                return Ok(orders);
+            }
+            catch (Exception e)
+
+            {
+                return BadRequest();
+            }
 
         }
-        [Route("OrderItems")]
+            [Route("OrderItems")]
         [HttpGet]
         public List<OrderItem> getOrderItems()
         {
